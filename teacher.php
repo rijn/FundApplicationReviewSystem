@@ -13,6 +13,15 @@ if (!$FARS->has_authority(1)) {
 	exit();
 }
 
+if (isset($_REQUEST['delete'])) {
+	$sql = "delete from `teacher` where `id` = '" . $_REQUEST['teacher_id'] . "' limit 1 ;";
+	// echo ($sql);
+	$query = mysql_query($sql);
+	echo ("affected row " . mysql_affected_rows());
+	include_once "footer.php";
+	exit();
+}
+
 $query = mysql_query('show full fields from `teacher` ;');
 $field = array();
 while ($res = mysql_fetch_array($query)) {
@@ -27,7 +36,7 @@ while ($res = mysql_fetch_array($query)) {
 
 if (isset($_REQUEST['submit'])) {
 	$submit = array();
-	while (list($key, $val) = each($field)) {
+	foreach ($field as $key => $val) {
 		if (strstr($key, 'argu_') !== false) {
 			$submit[$key] = @$_REQUEST[$key];
 		}
@@ -35,14 +44,14 @@ if (isset($_REQUEST['submit'])) {
 
 	if (isset($_REQUEST['teacher_id']) && $_REQUEST['teacher_id'] > 0) {
 		$affect_value = array();
-		while (list($key, $val) = each($submit)) {
+		foreach ($submit as $key => $val) {
 			array_push($affect_value, "`$key` = '$val'");
 		}
 		$sql = "update `teacher` set " . implode($affect_value, ',') . " where `id` = '" . $_REQUEST['teacher_id'] . "';";
 	} else {
 		$affect_field = array();
 		$affect_value = array();
-		while (list($key, $val) = each($submit)) {
+		foreach ($submit as $key => $val) {
 			array_push($affect_value, "'$val'");
 			array_push($affect_field, "`$key`");
 		}
@@ -55,7 +64,7 @@ if (isset($_REQUEST['submit'])) {
 	include_once "footer.php";
 	exit();
 
-	echo $sql;
+	// echo $sql;
 }
 
 ?>
@@ -77,7 +86,7 @@ if (isset($_REQUEST['teacher_id'])) {
 	$sql  = "select * from `teacher` where `id` = '" . $_REQUEST['teacher_id'] . "' limit 1;";
 	$data = mysql_query($sql);
 	$res  = mysql_fetch_array($data);
-	while (list($key, $val) = each($field)) {
+	foreach ($field as $key => $val) {
 		$field[$key] = @$res[$key];
 	}
 }
@@ -126,89 +135,11 @@ $data = $FARS->get_mysql($res['Field'], '`id`, `name`', '', false, false);
 </div>
 
 <script type="text/javascript">
-
-    // function getElements(formId) {
-    //     var form = document.getElementById(formId);
-    //     var elements = new Array();
-    //     var tagElements = form.getElementsByTagName('input');
-    //     for (var j = 0; j < tagElements.length; j++){
-    //          elements.push(tagElements[j]);
-    //     }
-    //     var tagElements = form.getElementsByTagName('select');
-    //     for (var j = 0; j < tagElements.length; j++){
-    //          elements.push(tagElements[j]);
-    //     }
-    //     return elements;
-    // }
-
-    // function inputSelector(element) {
-    //   if (element.checked)
-    //      return [element.name, element.value];
-    // }
-
-    // function input(element) {
-    //     switch (element.type.toLowerCase()) {
-    //         case 'submit':
-    //         case 'hidden':
-    //         case 'password':
-    //         case 'text':
-    //         case 'email':
-    //             return [element.name, element.value];
-    //         case 'checkbox':
-    //         case 'radio':
-    //             return inputSelector(element);
-    //         case 'select-one':
-    //         case 'select':
-    //             return [element.name, element.options[element.selectedIndex].value];
-    //     }
-    //     return false;
-    // }
-
-    // function serializeElement(element) {
-    //     var method = element.tagName.toLowerCase();
-    //     var parameter = input(element);
-
-    //     if (parameter) {
-    //       var key = encodeURIComponent(parameter[0]);
-    //       if (key.length == 0) return;
-
-    //       if (parameter[1].constructor != Array)
-    //         parameter[1] = [parameter[1]];
-
-    //       var values = parameter[1];
-    //       var results = [];
-    //       for (var i=0; i<values.length; i++) {
-    //         results.push(key + '=' + encodeURIComponent(values[i]));
-    //       }
-    //       return results.join('&');
-    //     }
-    //  }
-
-    // function serializeForm(formId) {
-    //     var elements = getElements(formId);
-    //     var queryComponents = new Array();
-
-    //     for (var i = 0; i < elements.length; i++) {
-    //       var queryComponent = serializeElement(elements[i]);
-    //       if (queryComponent)
-    //         queryComponents.push(queryComponent);
-    //     }
-
-    //     return queryComponents.join('&');
-    // }
-
     $(document).ready(function(){
         $('.ui.dropdown').dropdown();
         $('.ui.radio.checkbox').checkbox();
         $('.ui.checkbox').checkbox();
     });
-
-    // $('.submit').click(function(){
-
-    // 	alert(serializeForm('form-info'));
-
-
-    // });
 </script>
 
 <?php

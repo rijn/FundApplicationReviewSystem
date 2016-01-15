@@ -57,7 +57,8 @@
 
 
   <div class="ui blue borderless main inverted menu">
-      <a href="list.php" class="item">项目清单</a>
+      <a href="list.php?table=teacher" class="item">教师清单</a>
+      <a href="list.php?table=project" class="item">项目清单</a>
       <a href="teacher.php" class="item">添加教师</a>
       <a href="#" class="item">青年候选</a>
       <a href="#" class="item">面上候选</a>
